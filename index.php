@@ -8,12 +8,13 @@ if(isset($_GET["sides"]) && isset($_GET["advantage"]) && isset($_GET["how_many"]
 }else{
     $sides = 6;
     $advantage = 0;
+    $how_many = 25;
 }
 
 
 echo '<table border="1" style="float: left;"><tr><th colspan="2">Rolls</th></tr><tr><th>Roll Number</th><th>Roll Value</th></tr>';
 for($i=1;$i<=$how_many;$i++){
-    $value=roll($sides,$advantage);
+    $value=roll2($sides,$advantage);
     $rolls[$value]++;
     echo "<tr><td>$i</td><td>$value</td></tr>";
 
@@ -71,6 +72,20 @@ echo '</table>';
             }
         }
         return($sides);
+    }
+
+
+
+    function roll2($sides=6,$favor_high=0){ 
+        $chance_normal = 100/$sides;
+        $chance_normal_parition=(($sides-1)*$chance_normal)*1000;
+        $chance_crooked_partition=($chance_normal+$favor_high)*1000;
+        $random = random_int (1,$chance_normal_parition+$chance_crooked_partition);
+        if($random<=$chance_normal_parition){
+            return(random_int(1,$sides-1));
+        }else{
+            return($sides);
+        }
     }
 
 
