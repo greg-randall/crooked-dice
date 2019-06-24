@@ -16,7 +16,6 @@
         $value = roll($sides, $advantage); // do the actual roll
         $rolls[$value]++; //record the roll for stats 
         echo "<tr><td>$i</td><td>$value</td></tr>";
-        
     }
     echo '</table>';
 
@@ -34,13 +33,19 @@
         $chance_normal            = 100 / $sides;
         $chance_normal_parition   = (($sides - 1) * $chance_normal) * 1000;
         $chance_crooked_partition = ($chance_normal + $favor_high) * 1000;
-        $random                   = random_int(1, $chance_normal_parition + $chance_crooked_partition);
+        $random                   = best_rand(1, $chance_normal_parition + $chance_crooked_partition);
         if ($random <= $chance_normal_parition) {
-            return (random_int(1, $sides - 1));
+            return (best_rand(1, $sides - 1));
         } else {
             return ($sides);
         }
     }
 
-
+    function best_rand($low,$high){ // if random_int isn't available fall back to the older mt_rand
+        if(function_exists(random_int)){
+            return(random_int($low,$high));
+        }else{
+            return(mt_rand($low,$high));
+        }
+    }
 ?>
